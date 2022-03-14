@@ -14,8 +14,7 @@ type ApplicationDbContext() =
     override this.OnConfiguring(builder) =
         base.OnConfiguring(builder)
         builder
-            .UseNpgsql(@"Host=localhost;Username=test;Password=test"
-                       )
+            .UseNpgsql(@"Host=localhost;Username=test;Password=test")
             .LogTo(Action<string>(Console.WriteLine), LogLevel.Information)
             .EnableSensitiveDataLogging() |> ignore
         
