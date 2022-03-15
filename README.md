@@ -1,5 +1,24 @@
 # PgArrayTest
 
+Background issue: https://github.com/npgsql/efcore.pg/issues/2302
+
+## F# Workaround
+```f#
+// wrap anything in a Some(...)
+let ints = [| 1; 2 |] |> Some
+
+// this will generate the correct behavior
+db.Events.Where(fun x -> ints.Value.Contains(x.Id)).ToList()
+```
+
+```sql
+info: 3/15/2022 18:32:55.869 RelationalEventId.CommandExecuted[20101] (Microsoft.EntityFrameworkCore.Database.Command) 
+      Executed DbCommand DbCommand (16ms) [Parameters=[@__Value_0={ '1', '2' } (DbType = Object)], CommandType='Text', CommandTimeout='30']
+      SELECT b."Id"
+      FROM "Events" AS b
+      WHERE b."Id" = ANY (@__Value_0)
+```
+
 ## F# isn't okay
 
 ```shell
